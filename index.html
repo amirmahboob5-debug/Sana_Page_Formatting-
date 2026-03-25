@@ -39,14 +39,14 @@ button{
   font-size:16px;
 }
 
-/* ✅ Responsive + A4 compatible */
+/* Responsive + A4 */
 .preview{
   margin-top:20px;
   background:white;
   padding:0;
 
   width:100%;
-  max-width:210mm;   /* keeps A4 on desktop */
+  max-width:210mm;
   min-height:297mm;
 
   box-shadow:0 0 10px rgba(0,0,0,0.2);
@@ -70,7 +70,7 @@ button{
   width:33.33%;
   border:1px solid #ddd;
   padding:8px;
-  font-size:14px;   /* ✅ updated */
+  font-size:14px;
   line-height:1.4;
   white-space:pre-line;
 
@@ -78,7 +78,7 @@ button{
   page-break-inside: avoid;
 }
 
-/* ✅ Mobile optimization */
+/* Mobile */
 @media(max-width:700px){
 
   body{
@@ -91,45 +91,6 @@ button{
 
   .card{
     width:100%;
-    font-size:14px;
-  }
-
-}
-
-/* ✅ A4 print with safe margin */
-@page{
-  size:A4;
-  margin:5mm;
-}
-
-@media print{
-
-  textarea,button,h2{
-    display:none;   /* hide UI */
-  }
-
-  body{
-    background:white;
-    margin:0;
-    padding:0;
-  }
-
-  .container{
-    margin:0;
-    padding:0;
-    max-width:none;
-  }
-
-  .preview{
-    width:auto;
-    min-height:auto;
-    margin:0;
-    padding:0;
-    box-shadow:none;
-  }
-
-  .card{
-    font-size:14px;
   }
 
 }
@@ -150,7 +111,7 @@ button{
 
 <button onclick="downloadPDF()">Download PDF</button>
 
-<div class="preview">
+<div class="preview" id="printArea">
   <div id="sheet" class="grid"></div>
 </div>
 
@@ -195,8 +156,20 @@ function generate(){
 
 }
 
+/* ✅ MOBILE + DESKTOP PERFECT PDF */
 function downloadPDF(){
-  window.print();
+
+  const element = document.getElementById("printArea");
+
+  const opt = {
+    margin:       [5,5,5,5], // mm
+    filename:     'address-sheet.pdf',
+    image:        { type: 'jpeg', quality: 1 },
+    html2canvas:  { scale: 2, useCORS: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(element).save();
 }
 
 </script>
